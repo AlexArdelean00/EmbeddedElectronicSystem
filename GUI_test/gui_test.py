@@ -9,7 +9,6 @@ import numpy as np
 from threading import Thread
 
 class App:
-
     def __init__(self):
         # root window
         self.root = Tk()
@@ -50,14 +49,11 @@ class App:
         self.carica_img_button = Button(self.root, text="Carica Immagine", command=self.apri_immagine)
         self.carica_img_button.grid(column=1, row=1)
 
-        self.carica_video_button = Button(self.root, text="Carica Video")
-        self.carica_video_button.grid(column=1, row=2)
-
         self.invia_dati_button = Button(self.root, text="Invia Dati", command=self.invia_dati)
-        self.invia_dati_button.grid(column=1, row=3)
+        self.invia_dati_button.grid(column=1, row=2)
 
         self.esci_button = Button(self.root, text="Esci", command=self.root.destroy)
-        self.esci_button.grid(column=1, row=4)
+        self.esci_button.grid(column=1, row=3)
 
         # immagine elaborata
         self.right_canvas = Canvas(self.root, width=500, height=500)
