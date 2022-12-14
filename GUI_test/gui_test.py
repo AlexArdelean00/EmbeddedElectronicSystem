@@ -7,6 +7,7 @@ import time
 import serial 
 import numpy as np
 from threading import Thread
+from tkinter import font as tkFont  # for convenience
 
 class App:
     def __init__(self):
@@ -44,16 +45,24 @@ class App:
         self.com_cb.bind('<<ComboboxSelected>>', self.com_selezionata)    
         self.com_cb.current(3)
         self.com_selezionata()
-        self.com_cb.grid(column=1, row=0)
+        self.com_cb.grid(column=1, row=0, sticky="ew")
+        helv26 = tkFont.Font(family='Helvetica', size=20, weight='bold')
+        self.carica_img_button = Button(self.root, text="Carica Immagine", command=self.apri_immagine,
+            bd=5, fg='black', relief=GROOVE, font=helv26)
+        self.carica_img_button.grid(column=1, row=1, sticky="news")
 
-        self.carica_img_button = Button(self.root, text="Carica Immagine", command=self.apri_immagine)
-        self.carica_img_button.grid(column=1, row=1)
+        self.invia_dati_button = Button(self.root, text="Invia Dati", command=self.invia_dati,
+            bd=5, fg='black', relief=GROOVE, font=helv26)
+        self.invia_dati_button.grid(column=1, row=2, sticky="news")
 
-        self.invia_dati_button = Button(self.root, text="Invia Dati", command=self.invia_dati)
-        self.invia_dati_button.grid(column=1, row=2)
+        self.salva_button = Button(self.root, text="Salva", command=self.salva_immagine,
+            bg='green', bd=5, fg='black', relief=GROOVE, font=helv26)
+        self.salva_button.grid(column=1, row=3, sticky="news")
 
-        self.esci_button = Button(self.root, text="Esci", command=self.root.destroy)
-        self.esci_button.grid(column=1, row=3)
+        
+        self.esci_button = Button(self.root, text="Esci", command=self.root.destroy, 
+            bg='red', bd=5, fg='black', relief=GROOVE, font=helv26)
+        self.esci_button.grid(column=1, row=4, sticky="news")
 
         # immagine elaborata
         self.right_canvas = Canvas(self.root, width=500, height=500)
@@ -63,13 +72,20 @@ class App:
         self.root.mainloop()
 
     def apri_immagine(self):
-        filename = filedialog.askopenfilename(title='open')
-        self.img = Image.open(filename)
+        self.filename = filedialog.askopenfilename(title='open')
+        self.img = Image.open(self.filename)
         self.w, self.h = self.img.size
         self.array = np.asarray(self.img, np.uint8)
         self.data = self.array.tobytes()
         print(f"Aperta immagine: {self.img}")
         self.visualizza_immagine(self.img, self.left_canvas)
+
+    def salva_immagine(self):
+        try:
+            elab_filename = '\\'.join(self.filename.split('\\')[0:-1]) + "elab_img.jpg"
+            self.elab_img.save(elab_filename, 'JPEG')
+        except:
+            print("Immagine elaborata non ancora disponibile")
         
     def visualizza_immagine(self, img, canvas):    
         w, h = img.size
